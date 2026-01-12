@@ -1,0 +1,776 @@
+<!DOCTYPE html><html lang="zh-CN# 网站语言" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Xun的自述 | Xun's blog</title><meta name="author" content="xun"><meta name="copyright" content="xun"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f5f0fa"><meta name="description" content=":root {         --main-color: #6a0dad;         --secondary-color: #8a2be2;         --accent-color: #9932cc;         font-family: &#39;Comic Neue&#39;, &#39;Noto Sans SC&#39;, cursive;         --text-color: #d7b8">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Xun的自述">
+<meta property="og:url" content="http://xun-ab.github.io/about/index.html">
+<meta property="og:site_name" content="Xun&#39;s blog">
+<meta property="og:description" content=":root {         --main-color: #6a0dad;         --secondary-color: #8a2be2;         --accent-color: #9932cc;         font-family: &#39;Comic Neue&#39;, &#39;Noto Sans SC&#39;, cursive;         --text-color: #d7b8">
+<meta property="og:locale">
+<meta property="og:image" content="http://xun-ab.github.io/img/02.jpg">
+<meta property="article:published_time" content="2025-05-02T17:22:00.000Z">
+<meta property="article:modified_time" content="2026-01-12T10:09:34.503Z">
+<meta property="article:author" content="xun">
+<meta property="article:tag" content="CTF竞赛">
+<meta property="article:tag" content="二进制分析">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="信息安全">
+<meta property="article:tag" content="安全工具">
+<meta property="article:tag" content="安全开发">
+<meta property="article:tag" content="安全策略">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="漏洞分析">
+<meta property="article:tag" content="漏洞复现">
+<meta property="article:tag" content="红队技术">
+<meta property="article:tag" content="网络安全">
+<meta property="article:tag" content="网络安全">
+<meta property="article:tag" content="网络防御">
+<meta property="article:tag" content="逆向工程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xun-ab.github.io/img/02.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/01.png"><link rel="canonical" href="http://xun-ab.github.io/about/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//fonts.googleapis.com" crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#2d0a3d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f5f0fa')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&amp;family=Ma+Shan+Zheng&amp;family=Fredoka+One&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":"ture","top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":300,"languages":{"author":"Author: xun","link":"Link: ","source":"Source: Xun's blog","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Xun的自述',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Chewy&family=Fredoka+One&family=Caveat:wght@400;700&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;500;700&display=swap" rel="stylesheet"><!-- hexo injector head_end start --><link rel="stylesheet" href="/css/categorybar.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/img/03.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/02.jpg" onerror="this.onerror=null;this.src='/img/05.jpg'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="page type-about" id="body-wrap"><header class="not-home-page fixed" id="page-header" style="background-color: rgba(0, 0, 0, 0);"><nav id="nav"><!-- 左侧博客信息区域--><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/01.png" alt="Logo"><span class="site-name">Xun's blog</span></a></span><!-- 新增的导航菜单容器（居中布局关键）--><div id="nav-menus-container"><!-- 菜单主体部分--><div id="menus"><!-- 菜单项--><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><!-- 右侧功能区域（新增容器）--><div id="nav-right-container"><!-- 搜索按钮（移动到右侧）--><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><!-- 移动端汉堡菜单按钮--><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">Xun的自述</h1></div></header><main class="layout hide-aside" id="content-inner"><div id="page"><div class="container" id="article-container"><style>
+    :root {
+        --main-color: #6a0dad;
+        --secondary-color: #8a2be2;
+        --accent-color: #9932cc;
+        font-family: 'Comic Neue', 'Noto Sans SC', cursive;
+        --text-color: #d7b8ff;
+        --dark-purple: #2d0a3d;
+        --bg-gradient: linear-gradient(135deg, var(--dark-purple) 0%, #4b0082 100%);
+        --card-bg: rgba(45, 10, 61, 0.7);
+        --glow-effect: 0 0 10px rgba(154, 50, 204, 0.7), 0 0 20px rgba(154, 50, 204, 0.5);
+    }
+    body {
+        color: var(--text-color);
+        font-family: 'Noto Sans SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.8;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+    #page {
+    	background: linear-gradient(135deg, #2d0a3d99 0%, #4b008299 100%) !important;
+    }
+    p {
+        font-size: 1.35rem;
+        font-family: 'Ma Shan Zheng', cursive;
+        line-height: 1.6;
+        color: var(--text-color);
+        font-weight: 400;
+        text-shadow: 0 0 5px rgba(154, 50, 204, 0.2);
+    }
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+    .header::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+        margin: 1rem auto;
+        border-radius: 60%;
+        box-shadow: var(--glow-effect);
+    }
+    .header h1 {
+        font-size: 7rem;
+        font-family: 'Fredoka One';
+        line-height: 0.7;
+        color: var(--secondary-color);
+        margin-bottom: 2rem;
+        text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3), 0 0 40px rgba(138, 43, 226, 0.5);
+        font-weight: 800;
+        letter-spacing: 2px;
+        font-family: 'ZCOOL KuaiLe', cursive;
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(to bottom, #6a0dad, #9b30ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    .header h1::after {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #6a0dad, transparent);
+        border-radius: 10px;
+    }
+    h2 {
+        font-size: 2rem;
+        color: var(--secondary-color);
+        margin-bottom: 2rem;
+        font-family: 'ZCOOL KuaiLe', cursive;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        padding-bottom: 10px;
+        gap: 1rem;
+    }
+    h2::before {
+        content: "\f0e7";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 700;
+        color: var(--accent-color);
+    }
+    h2::after {
+        content: "\f0e7";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 700;
+        color: var(--accent-color);
+    }
+    h2 .underline {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #6a0dad, transparent);
+        border-radius: 10px;
+    }
+    .profile {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin: 0rem 7rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+    }
+    .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 4px solid var(--secondary-color);
+        box-shadow: 0 0 20px rgba(138, 43, 226, 0.7);
+        background: url('/img/02.jpg') no-repeat center center;
+        background-size: cover;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle, transparent 60%, rgba(138, 43, 226, 0.3) 100%);
+    }
+    .avatar:hover {
+        transform: rotate(5deg) scale(1.05);
+        box-shadow: 0 0 30px rgba(138, 43, 226, 0.9);
+    }
+    .quote {
+        flex: 1;
+        font-style: italic;
+        padding: 2rem;
+        background: rgba(106, 13, 173, 0.15);
+        border-right: 8px solid var(--accent-color);
+        border-left: 8px solid var(--accent-color);
+        position: relative;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        font-family: 'Caveat', cursive, 'Noto Sans SC', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+    .quote:hover {
+        background: rgba(106, 13, 173, 0.25);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(154, 50, 204, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .quote::before {
+        content: "\201C";
+        font-size: 4rem;
+        color: rgba(138, 43, 226, 0.8);
+        position: absolute;
+        top: -1rem;
+        left: 0rem;
+        font-family: serif;
+    }
+    .quote::after {
+        content: "\201D";
+        font-size: 4rem;
+        color: rgba(138, 43, 226, 0.8);
+        position: absolute;
+        bottom: -3rem;
+        right: 0.5rem;
+        font-family: serif;
+    }
+    .bio {
+        margin-bottom: 2.5rem;
+        padding: 0 2rem 2rem 2rem;
+        background: var(--card-bg);
+        margin: 2rem 2rem;
+        border-radius: 50px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border-left: 12px solid rgba(167, 79, 238);
+        border-right: 12px solid rgba(167, 79, 238);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .bio:hover {
+        background: rgba(106, 13, 173, 0.25);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(154, 50, 204, 0.3);
+    }
+    .bio::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 0%, rgba(138, 43, 226, 0.05) 100%);
+        pointer-events: none;
+    }
+    .bio p {
+        font-size: 1.3rem;
+        line-height: 1.8;
+        color: #d880e4;
+        font-weight: 500;
+        margin: 2rem 2rem;
+    }
+    .section {
+        margin-bottom: 2.5rem;
+        padding: 0 2rem 2rem 2rem;
+        background: var(--card-bg);
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(138, 43, 226, 0.3);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(154, 50, 204, 0.4);
+    }
+    .section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--main-color), var(--secondary-color));
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 25%;
+    }
+    li {
+        position: relative;
+        font-size: 1rem;
+        color: #f29afd;
+        font-weight: 300;
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    li:hover {
+        transform: translateX(5px);
+        color: var(--secondary-color);
+    }
+    li::before {
+        content: "\f054";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 1000;
+        position: absolute;
+        left: 0;
+        color: #ca6fff;
+        transition: all 0.3s ease;
+    }
+    li:hover::before {
+        color: var(--secondary-color);
+        transform: translateX(5px);
+    }
+    .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    .skill {
+        padding: 0.5rem 1rem;
+        background: rgba(138, 43, 226, 0.2);
+        border: 2px dashed var(--accent-color);
+        border-radius: 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: default;
+        position: relative;
+        overflow: hidden;
+        font-family: 'Noto Sans SC', sans-serif;
+        font-weight: 400;
+    }
+    .skill:hover {
+        background: rgba(154, 50, 204, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(154, 50, 204, 0.3);
+    }
+    .skill-meter {
+        width: 100%;
+        background-color: rgba(138, 43, 226, 0.1);
+        border-radius: 10px;
+        margin: 0.5rem 0;
+        overflow: hidden;
+    }
+    .skill-level {
+        height: 8px;
+        border-radius: 10px;
+        background: linear-gradient(to right, var(--main-color), var(--secondary-color));
+        box-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
+        transition: width 1s ease-in-out;
+    }
+</style>
+<div class="container">
+        <div class="header">
+            <h1>kukualのblog</h1>
+            <p style="font-size: 1.9rem; font-weight: 800; color: var(--accent-color); text-shadow: 0 0 10px rgba(154, 50, 204, 0.5);">「Xun」的网络安全研习录</p>
+        </div>
+        <div class="profile">
+            <div class="quote">
+                在代码的世界里寻找漏洞，在国漫的宇宙中寻找感动。技术是我的剑，国漫是我的盾，两者共同构筑我的数字生活。
+            </div>
+            <div class="avatar"></div>
+        </div>
+        <div class="bio">
+            <h2>
+                <span>关于我</span>
+                <span class="underline"></span>
+            </h2>
+            <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;嗨！我是Xun，一名热爱网络安全的大学生。白天是代码审计的学徒，夜晚是CTF赛场的战士。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;我的技术之旅始于大一时期的一次校园网络安全比赛，从此便沉迷于web安全世界的神秘与挑战。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;除了钻研安全技术，我也是一名狂热的国漫爱好者，尤其喜欢《剑来》、《遮天》、《完美世界》、《凡人修仙传》等古风热血的作品。
+            </p>
+            <div style="margin-top: 1rem; text-align: center;">
+                <i class="fas fa-graduation-cap" style="color: var(--accent-color);"></i> &nbsp;&nbsp;某大学网络安全专业&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <i class="fas fa-map-marker-alt" style="color: var(--accent-color);"></i>&nbsp;&nbsp;中国&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <i class="fas fa-heart" style="color: var(--accent-color);"></i> &nbsp;&nbsp;网络安全 | 动漫 | 编程
+            </div>
+        </div>
+        <div class="section">
+            <h2>
+                <span>博客内容</span>
+                <span class="underline"></span>
+            </h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <ul>
+                    <li>网络安全技术研究与实战案例</li>
+                    <li>CTF竞赛解题思路与技巧</li>
+                    <li>漏洞复现与分析报告</li>
+                    <li>安全工具使用</li>
+                </ul>
+                <ul>
+                    <li>偶尔的国漫推荐</li>
+                    <li>学习笔记与资源分享</li>
+                    <li>技术书籍阅读心得</li>
+                    <li>编程技巧</li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2>
+                <span>技术专长</span>
+                <span class="underline"></span>
+            </h2>
+            <p style="font-size: 1.2rem; font-weight: 800; color: var(--accent-color); "></p>
+        </div>
+        <div class="section">
+            <h2>
+                <span>近期追番</span>
+                <span class="underline"></span>
+            </h2>
+            <p style="font-size: 1.2rem; font-weight: 800; color: var(--accent-color); ">我喜欢的作品：</p>
+            <div class="anime-list">
+                <div class="anime-card" herf="https://www.bilibili.com/bangumi/play/ep29721">
+                    <div class="anime-cover" style="background-image: url('/img/51.jpg');"></div>
+                    <div class="anime-info">
+                        <div class="anime-title">剑来</div>
+                    </div>
+                </div>
+                <div class="anime-card" herf="https://www.bilibili.com/bangumi/play/ss34430">
+                    <div class="anime-cover" style="background-image: url('/img/52.jpg');"></div>
+                    <div class="anime-info">
+                        <div class="anime-title">遮天</div>
+                    </div>
+                </div>
+                <div class="anime-card" herf="https://www.bilibili.com/bangumi/play/ss41410">
+                    <div class="anime-cover" style="background-image: url('/img/53.png');"></div>
+                    <div class="anime-info">
+                        <div class="anime-title">完美世界</div>
+                    </div>
+                </div>
+                <div class="anime-card" herf="https://www.bilibili.com/bangumi/play/ss33378">
+                    <div class="anime-cover" style="background-image: url('/img/54.jpg');"></div>
+                    <div class="anime-info">
+                        <div class="anime-title">凡人修仙传</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+        <div class="section">
+            <h2>
+                <span>学习资源推荐</span>
+                <span class="underline"></span>
+            </h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <ul>
+                    <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://ctf-wiki.org/" style="color: var(--accent-color); text-decoration: none;">CTF Wiki</a> - 全面的CTF知识库</li>
+                    <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.hackthebox.com/" style="color: var(--accent-color); text-decoration: none;">Hack The Box</a> - 在线渗透测试练习平台</li>
+                    <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.vulnhub.com/" style="color: var(--accent-color); text-decoration: none;">VulnHub</a> - 漏洞环境下载</li>
+                </ul>
+                <ul>
+                    <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.bilibili.com/" style="color: var(--accent-color); text-decoration: none;">哔哩哔哩</a> - 技术视频学习</li>
+                    <li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.anime1.me/" style="color: var(--accent-color); text-decoration: none;">Anime1</a> - 动漫观看网站</li>
+                </ul>
+            </div>
+	</div>
+</div>
+<script>
+        // 创建浮动图标
+        function createFloatingIcons() {
+            const container = document.getElementById('floatingIcons');
+            const icons = ['fa-bug', 'fa-shield-alt', 'fa-code', 'fa-lock', 'fa-gamepad', 'fa-tv', 'fa-terminal', 'fa-heart', 'fa-star', 'fa-key'];
+            for (let i = 0; i < 25; i++) {
+                const icon = document.createElement('div');
+                icon.className = 'floating-icon';
+                icon.innerHTML = `<i class="fas ${icons[Math.floor(Math.random() * icons.length)]}"></i>`;
+                // 随机位置
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = 10 + Math.random() * 20;
+                const size = 1 + Math.random() * 2;
+                icon.style.left = `${left}%`;
+                icon.style.top = `${Math.random() * 100 + 100}%`;
+                icon.style.animationDelay = `${delay}s`;
+                icon.style.animationDuration = `${duration}s`;
+                icon.style.fontSize = `${size}rem`;
+                container.appendChild(icon);
+            }
+        }
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+        	createFloatingIcons();
+            updateVisitorCount();
+            // 为所有链接添加平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+</script>
+</div></main></div><footer id="footer" style="background-color: rgba(45, 10, 61, 0.2);"><div class="footer-other"><div class="footer-copyright"></div><div class="footer_custom_text"><style>
+  .footer {
+    text-align: center;
+    position: relative;
+  }
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .social-links i {
+    color: #8400ff;
+  }
+  .social-link {
+    color: #8a2be2;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(138, 43, 226, 0.1);
+  }
+  .social-link:hover {
+    color: #892be294;
+    background: #892be294;
+    transform: translateY(-3px) scale(1.2);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+    text-decoration: none !important; 
+  }
+  .footer p {
+    margin: 0.5rem 0;
+    line-height: 1;
+  }
+  .copyright {
+    font-size: 1.1rem; 
+    color: #c08bdf;
+    font-weight: 400;
+  }
+  .tagline {
+    font-size: 0.8rem;
+    color: #8a2be2;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .visitor-count {
+    font-size: 0.75rem;
+    color: rgba(219, 142, 255, 0.658);
+    font-weight: 300;
+  }
+  #visitorCount {
+    font-weight: bold;
+  }
+</style>
+<div class="footer">
+  <div class="social-links">
+    <a href="https://github.com/xun-ab" class="social-link" target="_blank" rel="external nofollow noopener noreferrer" aria-label="GitHub" title="GitHub">
+      <i class="fab fa-github"></i>
+    </a>
+    
+    <a href="https://b23.tv/9tNUOxw" class="social-link" target="_blank" rel="external nofollow noopener noreferrer" aria-label="bilibili" title="bilibili">
+      <i class="fab fa-bilibili"></i>
+    </a>
+  </div>
+  <p class="copyright">© 2026 Xun's blog - 所有权利保留</p>
+  <p class="tagline">> Stay curious, stay hacking, stay anime! <</p>
+  <p class="visitor-count">访问量: <span id="visitorCount">1024</span> | 你是第 <span id="dailyVisitor">1</span> 位今日访客</p>
+</div>
+<script>
+  // 确保DOM加载完成后执行
+  document.addEventListener('DOMContentLoaded', function() {
+    // 模拟访问量增长
+    function updateVisitorCount() {
+      const countElement = document.getElementById('visitorCount');
+      let count = parseInt(countElement.textContent) || 1024;
+      // 从localStorage获取或初始化计数
+      const storedCount = localStorage.getItem('totalVisitors');
+      if (storedCount) {
+        count = parseInt(storedCount);
+        countElement.textContent = count;
+      }
+      // 每日访客计数
+      const today = new Date().toDateString();
+      const dailyData = JSON.parse(localStorage.getItem('dailyVisitors') || '{"date":"", "count":0}');
+      if (dailyData.date !== today) {
+        dailyData.date = today;
+        dailyData.count = 0;
+      }
+      dailyData.count += 1;
+      document.getElementById('dailyVisitor').textContent = dailyData.count;
+      localStorage.setItem('dailyVisitors', JSON.stringify(dailyData));
+      // 每30秒随机增加访问量
+      setInterval(() => {
+        count += Math.floor(Math.random() * 3);
+        countElement.textContent = count;
+        localStorage.setItem('totalVisitors', count.toString());
+      }, 30000);
+    }
+    updateVisitorCount();
+    // 添加点击动画效果
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        this.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 300);
+      });
+    });
+  });
+</script>
+</div></div></footer><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><script defer src="/js/cursor.js"></script><script src="/js/sakura.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="输入关键词…" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
