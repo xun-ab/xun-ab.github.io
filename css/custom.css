@@ -361,4 +361,8 @@ input, textarea, [contenteditable] {
   background-position: center 18% !important;
 }
 
+#page-header.full_page #site-info {
+  top: 72px !important;
+}
+
 
