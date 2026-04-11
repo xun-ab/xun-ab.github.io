@@ -356,4 +356,26 @@ input, textarea, [contenteditable] {
   color: rgba(188, 188, 188) !important; /* 设置为白色 */
 }
 
+/* 首页头图强制显示 51.png，避免被额外背景块覆盖 */
+#page-header.full_page {
+  background-image: url('/img/51.png') !important;
+  background-position: center 32% !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+#page-header.full_page::before {
+  background: transparent !important;
+  opacity: 0 !important;
+}
+
+#page-header.full_page #site-info,
+#page-header.full_page #site-title,
+#page-header.full_page #site-subtitle,
+#page-header.full_page #scroll-down {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
 
