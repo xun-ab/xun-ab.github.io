@@ -356,13 +356,4 @@ input, textarea, [contenteditable] {
   color: rgba(188, 188, 188) !important; /* 设置为白色 */
 }
 
-/* 仅微调首页头图位置，让 51.png 的脸部完整显示 */
-#page-header.full_page {
-  background-position: center 18% !important;
-}
-
-#page-header.full_page #site-info {
-  top: 52px !important;
-}
-
 
