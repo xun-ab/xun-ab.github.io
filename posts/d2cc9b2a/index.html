@@ -1,0 +1,479 @@
+<!DOCTYPE html><html lang="zh-CN# 网站语言" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Wireshark | Xun's blog</title><meta name="author" content="xun"><meta name="copyright" content="xun"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f5f0fa"><meta name="description" content="Wireshark  免责声明本文档仅供学习和研究使用,请勿使用文中的技术源码用于非法用途,任何人造成的任何负面影响,与本人无关.  官网  https:&#x2F;&#x2F;www.wireshark.org&#x2F;  流量包资源  Web 2.0 for packets | pcapr - 提供大量样本的社区 automayt&#x2F;ICS-pcap - 各类工控的 pcap 包 ICS-Security-Too">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wireshark">
+<meta property="og:url" content="http://xun-ab.github.io/posts/d2cc9b2a/index.html">
+<meta property="og:site_name" content="Xun&#39;s blog">
+<meta property="og:description" content="Wireshark  免责声明本文档仅供学习和研究使用,请勿使用文中的技术源码用于非法用途,任何人造成的任何负面影响,与本人无关.  官网  https:&#x2F;&#x2F;www.wireshark.org&#x2F;  流量包资源  Web 2.0 for packets | pcapr - 提供大量样本的社区 automayt&#x2F;ICS-pcap - 各类工控的 pcap 包 ICS-Security-Too">
+<meta property="og:locale">
+<meta property="og:image" content="http://xun-ab.github.io/img/04.png">
+<meta property="article:published_time" content="2026-01-13T08:40:34.591Z">
+<meta property="article:modified_time" content="2026-01-13T09:15:12.234Z">
+<meta property="article:author" content="xun">
+<meta property="article:tag" content="CTF竞赛">
+<meta property="article:tag" content="二进制分析">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="信息安全">
+<meta property="article:tag" content="安全工具">
+<meta property="article:tag" content="安全开发">
+<meta property="article:tag" content="安全策略">
+<meta property="article:tag" content="渗透测试">
+<meta property="article:tag" content="漏洞分析">
+<meta property="article:tag" content="漏洞复现">
+<meta property="article:tag" content="红队技术">
+<meta property="article:tag" content="网络安全">
+<meta property="article:tag" content="网络安全">
+<meta property="article:tag" content="网络防御">
+<meta property="article:tag" content="逆向工程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://xun-ab.github.io/img/04.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Wireshark",
+  "url": "http://xun-ab.github.io/posts/d2cc9b2a/",
+  "image": "http://xun-ab.github.io/img/04.png",
+  "datePublished": "2026-01-13T08:40:34.591Z",
+  "dateModified": "2026-01-13T09:15:12.234Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "xun",
+      "url": "https://xun-ab.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/01.png"><link rel="canonical" href="http://xun-ab.github.io/posts/d2cc9b2a/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//fonts.googleapis.com" crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#2d0a3d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f5f0fa')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chewy&amp;family=Ma+Shan+Zheng&amp;family=Fredoka+One&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":"ture","top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400,"highlightFullpage":true,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":300,"languages":{"author":"Author: xun","link":"Link: ","source":"Source: Xun's blog","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Wireshark',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Chewy&family=Fredoka+One&family=Caveat:wght@400;700&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;500;700&display=swap" rel="stylesheet"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/categorybar.css"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 8.1.1"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/img/03.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/02.jpg" onerror="this.onerror=null;this.src='/img/05.jpg'" alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(/img/04.png);"><nav id="nav"><!-- 左侧博客信息区域--><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/01.png" alt="Logo"><span class="site-name">Xun's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Wireshark</span></a></span><!-- 新增的导航菜单容器（居中布局关键）--><div id="nav-menus-container"><!-- 菜单主体部分--><div id="menus"><!-- 菜单项--><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><!-- 右侧功能区域（新增容器）--><div id="nav-right-container"><!-- 搜索按钮（移动到右侧）--><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><!-- 移动端汉堡菜单按钮--><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Wireshark</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-01-13T08:40:34.591Z" title="Created 2026-01-13 16:40:34">2026-01-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-13T09:15:12.234Z" title="Updated 2026-01-13 17:15:12">2026-01-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E5%90%88%E9%9B%86/">工具使用合集</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>5mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id data-flag-title><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;本文最后更新于&quot;,&quot;messageNext&quot;:&quot;天前，部分内容可能已失效&quot;,&quot;postUpdate&quot;:&quot;2026-01-13 17:15:12&quot;}" hidden></div><h1 id="Wireshark"><a href="#Wireshark" class="headerlink" title="Wireshark"></a>Wireshark</h1><p><img src="/img/img1/Pasted_image_20260113165932.png" alt="Pasted_image_20260113165932.png"></p>
+<hr>
+<h2 id="免责声明"><a href="#免责声明" class="headerlink" title="免责声明"></a>免责声明</h2><p><code>本文档仅供学习和研究使用,请勿使用文中的技术源码用于非法用途,任何人造成的任何负面影响,与本人无关.</code></p>
+<hr>
+<p><strong>官网</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.wireshark.org/">https://www.wireshark.org/</a></li>
+</ul>
+<p><strong>流量包资源</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.pcapr.net/home">Web 2.0 for packets | pcapr</a> - 提供大量样本的社区</li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/automayt/ICS-pcap">automayt&#x2F;ICS-pcap</a> - 各类工控的 pcap 包</li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/ITI/ICS-Security-Tools/tree/master/pcaps">ICS-Security-Tools&#x2F;pcaps</a> - 各类工控的 pcap 包</li>
+</ul>
+<p><strong>在线分析</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.networktotal.com/index.html">NetworkTotal - Free Online Network Traffic Scanner</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.virustotal.com/gui/home/upload">VirusTotal</a></li>
+</ul>
+<p><strong>文章 &amp; Reference</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/hzhsan/article/details/43453251">wireshark基本用法及过虑规则</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://wiki.wireshark.org/SampleCaptures">SampleCaptures - The Wireshark Wiki</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://wiki.wireshark.org/CaptureSetup/USB">CaptureSetup&#x2F;USB - The Wireshark Wiki</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/bcbobo21cn/article/details/51454170">图解Wireshark协议分析实例</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.comparitech.com/net-admin/wireshark-cheat-sheet/">Wireshark Cheat Sheet - Commands, Captures, Filters &amp; Shortcuts</a></li>
+</ul>
+<p><strong>插件&#x2F;增强工具</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/pentesteracademy/patoolkit">pentesteracademy&#x2F;patoolkit</a> - Wireshark 插件，增强分析能力</li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/leolovenet/qqwry2mmdb">leolovenet&#x2F;qqwry2mmdb</a> - 为 Wireshark 能使用纯真网络 IP 数据库(QQwry)而提供的格式转换工具,不支持 windows</li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://docs.google.com/file/d/0B3tHnfnS08GyWjJUOXE3UGFJRnc/edit">https://docs.google.com/file/d/0B3tHnfnS08GyWjJUOXE3UGFJRnc/edit</a> - TeamViewer 检测插件</li>
+</ul>
+<hr>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>什么是流量包</strong></p>
+<p>流量包指利用 tcpdump 等工具，对计算机上的某个网络设备进行流量抓取所所获得的 PCAP 格式的流量文件。</p>
+<p><strong>什么是 wireshark</strong></p>
+<p>Wireshark 是非常流行的网络流量分析软件，可以截取各种网络数据包，并显示数据包详细信息。常用于开发测试过程各种问题定位。Wireshark 使用 WinPCAP 作为接口，直接与网卡进行数据报文交换。</p>
+<p><strong>什么是 Tshark</strong></p>
+<p>网络分析工具下的一个分支，主要用于命令行环境进行抓包、分析，尤其对协议深层解析时，难以胜任的场景中。简单来说就是命令行下的 wireshark</p>
+<hr>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><strong>Ubuntu</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add-apt-repository ppa:wireshark-dev/stable</span><br><span class="line">apt update</span><br><span class="line">apt install -y wireshark</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="过滤语法"><a href="#过滤语法" class="headerlink" title="过滤语法"></a>过滤语法</h2><p><strong>比较操作符</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lt   &lt;      <span class="comment"># 小于</span></span><br><span class="line">le   &lt;=     <span class="comment"># 小于等于</span></span><br><span class="line">eq   ==     <span class="comment"># 等于</span></span><br><span class="line">gt   &gt;      <span class="comment"># 大于</span></span><br><span class="line">ge   &gt;=     <span class="comment"># 大于等于</span></span><br><span class="line">ne   !=     <span class="comment"># 不等</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>逻辑操作符</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">and  &amp;&amp;     <span class="comment"># 两个条件同时满足</span></span><br><span class="line">or   ||     <span class="comment"># 其中一个条件被满足</span></span><br><span class="line">xor  ^^     <span class="comment"># 有且仅有一个条件被满足</span></span><br><span class="line">not  !      <span class="comment"># 没有条件被满足</span></span><br><span class="line">[n] [...]   <span class="comment"># 过滤特定的单词或文字</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>快速使用</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">http.request.method == <span class="string">&quot;POST&quot;</span>       <span class="comment"># POST 请求</span></span><br><span class="line">tcp contains <span class="string">&quot;http&quot;</span>                 <span class="comment"># 显示 payload 中包括&quot;http&quot;字符串的 tcp 封包.</span></span><br><span class="line">http contains <span class="string">&quot;flag&quot;</span></span><br><span class="line">http.request.uri contains <span class="string">&quot;online&quot;</span>  <span class="comment"># 显示请求的 uri 包括&quot;online&quot;的 http 封包.</span></span><br><span class="line">ip.addr == 1.1.1.1                  <span class="comment"># IP 为 1.1.1.1 的流量</span></span><br><span class="line"></span><br><span class="line">Ctrl+Alt+Shift+T,切换跟踪 tcp 流</span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤 IP</strong></p>
+<p>如来源 IP 或者目标 IP 等于某个 IP</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ip.src eq 192.168.1.254 or ip.dst eq 192.168.1.254</span><br><span class="line"></span><br><span class="line">或</span><br><span class="line"></span><br><span class="line">ip.addr eq 192.168.1.254            <span class="comment"># 都能显示来源 IP 和目标 IP</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤端口</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tcp.port eq 80                      <span class="comment"># 不管端口是来源的还是目标的都显示</span></span><br><span class="line">tcp.port == 80</span><br><span class="line">tcp.port eq 2722</span><br><span class="line">tcp.port eq 80 or udp.port eq 80</span><br><span class="line">tcp.dstport == 80                   <span class="comment"># 只显 tcp 协议的目标端口 80</span></span><br><span class="line">tcp.srcport == 80                   <span class="comment"># 只显 tcp 协议的来源端口 80</span></span><br><span class="line">udp.srcport == 80                   <span class="comment"># 筛选udp协议的源端口为80的流量包</span></span><br><span class="line">udp.port eq 15000</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcp.port &gt;= 1 and tcp.port &lt;= 80    <span class="comment"># 过滤端口范围</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤协议</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">tcp</span><br><span class="line">udp</span><br><span class="line">arp</span><br><span class="line">icmp</span><br><span class="line">http</span><br><span class="line">smtp</span><br><span class="line">ftp</span><br><span class="line">dns</span><br><span class="line">msnms</span><br><span class="line">ip</span><br><span class="line">ssl</span><br><span class="line">oicq</span><br><span class="line">bootp</span><br></pre></td></tr></table></figure>
+
+<p>排除 arp 包，如 <code>!arp</code> 或者 <code>not arp</code></p>
+<p><strong>过滤 MAC</strong></p>
+<p>以太网头过滤</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">eth.dst == A0:00:00:04:C5:84    <span class="comment"># 过滤目标 mac</span></span><br><span class="line">eth.src eq A0:00:00:04:C5:84    <span class="comment"># 过滤来源 mac</span></span><br><span class="line">eth.dst==A0:00:00:04:C5:84</span><br><span class="line">eth.dst==A0-00-00-04-C5-84</span><br><span class="line">eth.addr eq A0:00:00:04:C5:84   <span class="comment"># 过滤来源 MAC 和目标 MAC 都等于 A0:00:00:04:C5:84 的</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>包长度过滤</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">udp.length == 26                <span class="comment"># 这个长度是指 udp 本身固定长度8加上 udp 下面那块数据包之和</span></span><br><span class="line">tcp.len &gt;= 7                    <span class="comment"># 指的是 ip 数据包(tcp 下面那块数据),不包括 tcp 本身</span></span><br><span class="line">ip.len == 94                    <span class="comment"># 除了以太网头固定长度 14,其它都算是 ip.len,即从 ip 本身到最后</span></span><br><span class="line">frame.len == 119                <span class="comment"># 整个数据包长度,从 eth 开始到最后</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>http 模式过滤</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">http.request.method == “GET”</span><br><span class="line">http.request.method == “POST”</span><br><span class="line">http.request.uri == “/img/logo-edu.gif”</span><br><span class="line">http contains “GET”</span><br><span class="line">http contains “HTTP/1.”</span><br><span class="line"></span><br><span class="line"><span class="comment"># GET包</span></span><br><span class="line">http.request.method == “GET” &amp;&amp; http contains “Host: “</span><br><span class="line">http.request.method == “GET” &amp;&amp; http contains “User-Agent: “</span><br><span class="line"><span class="comment"># POST包</span></span><br><span class="line">http.request.method == “POST” &amp;&amp; http contains “Host: “</span><br><span class="line">http.request.method == “POST” &amp;&amp; http contains “User-Agent: “</span><br><span class="line"><span class="comment"># 响应包</span></span><br><span class="line">http contains “HTTP/1.1 200 OK” &amp;&amp; http contains “Content-Type: “</span><br><span class="line">http contains “HTTP/1.0 200 OK” &amp;&amp; http contains “Content-Type: “</span><br></pre></td></tr></table></figure>
+
+<p><strong>TCP 参数过滤</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcp.flags                   <span class="comment"># 显示包含 TCP 标志的封包。</span></span><br><span class="line">tcp.flags.syn == 0x02       <span class="comment"># 显示包含 TCP SYN 标志的封包。</span></span><br><span class="line">tcp.flags.reset == 1        <span class="comment"># 过滤 TCP RST 包。先找到 RST 包，然后右键 Follow -&gt; TCP Stream 是常用的排障方式</span></span><br><span class="line">tcp.window_size == 0 &amp;&amp; tcp.flags.reset != 1</span><br><span class="line">tcp.analysis.retransmission <span class="comment"># 过滤所有的重传包</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>包内容过滤</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcp[20]                     <span class="comment"># 表示从 20 开始，取 1 个字符</span></span><br><span class="line">tcp[20:]                    <span class="comment"># 表示从 20 开始，取 1 个字符以上</span></span><br><span class="line">tcp[20:8]                   <span class="comment"># 表示从 20 开始，取 8 个字符</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">udp[8:1]==32</span><br><span class="line">udp[8:3]==81:60:03          <span class="comment"># 偏移 8 个 bytes,再取 3 个数，是否与 == 后面的数据相等</span></span><br><span class="line">eth.addr[0:3]==00:06:5B</span><br></pre></td></tr></table></figure>
+
+<p>matches(匹配)和 contains(包含某字符串)语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip.src==192.168.1.107 and udp[8:5] matches “\\x02\\x12\\x21\\x00\\x22″</span><br><span class="line">ip.src==192.168.1.107 and udp contains 02:12:21:00:22</span><br><span class="line">ip.src==192.168.1.107 and tcp contains “GET”</span><br><span class="line">udp contains 7c:7c:7d:7d    <span class="comment"># 匹配 payload 中含有 0x7c7c7d7d 的 UDP 数据包，不一定是从第一字节匹配。</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="捕获USB流量"><a href="#捕获USB流量" class="headerlink" title="捕获USB流量"></a>捕获USB流量</h2><p><strong>相关工具</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://desowin.org/usbpcap/">USBPcap - USB Packet capture for Windows</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/JohnDMcMaster/usbrply">JohnDMcMaster&#x2F;usbrply</a> - 将 .pcap 文件（捕获的 USB 数据包）转换为 Python 或 C 代码，以重播捕获的 USB 命令。</li>
+</ul>
+<p><strong>相关文章</strong></p>
+<ul>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://blog.csdn.net/shiailan/article/details/97305163">使用wireshark抓取USB包</a></li>
+<li><a target="_blank" rel="external nofollow noopener noreferrer" href="https://www.freebuf.com/column/166711.html">Wireshark如何捕获USB流量</a></li>
+</ul>
+<hr>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><ul>
+<li>更多案例参考 <a href="../BlueTeam/%E5%AE%9E%E9%AA%8C/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90.md">流量分析</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://xun-ab.github.io/">xun</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://xun-ab.github.io/posts/d2cc9b2a/">http://xun-ab.github.io/posts/d2cc9b2a/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/04.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>感谢您的支持！</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src="/img/wechat.jpg" alt="微信"></a><div class="post-qr-code-desc">微信</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/posts/42aa118/" title="PolarisCTF Web"><img class="cover" src="/img/04.png" onerror="onerror=null;src='/img/06.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">PolarisCTF Web</div></div></div></a><a class="pagination-related  no-desc" href="/posts/6566effc/" title="Wfuzz"><img class="cover" src="/img/04.png" onerror="onerror=null;src='/img/06.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Wfuzz</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/02.jpg" onerror="this.onerror=null;this.src='/img/05.jpg'" alt="avatar"></div><div class="author-info-name">xun</div><div class="author-info-description">专注于网络安全技术研究 | 渗透测试实战案例 | CTF竞赛解析 | 漏洞复现分析</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="external nofollow noopener noreferrer" href="https://github.com/xun-ab"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/xun-ab" target="_blank" title="Github" rel="external nofollow noopener noreferrer"><i class="fab fa-github" style="color: #8a2be2;"></i></a><a class="social-icon" href="https://b23.tv/9tNUOxw" target="_blank" title="bilibili" rel="external nofollow noopener noreferrer"><i class="fab fa-bilibili" style="color: #8a2be2;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content"><style>
+.announcement-card {
+    --main-color: #ff00ff;
+    --secondary-color: #00ffff;
+    --highlight-color: #ff5500;
+    position: relative;
+    overflow: hidden;
+}
+.announcement-content {
+    font-size: 1rem; 
+    line-height: 1.2; 
+    color: #ffffff;
+    position: relative;
+}
+.keyword {
+    color: var(--secondary-color);
+    font-weight: 300;
+    font-size: 1.1rem; 
+}
+.highlight {
+    color: var(--main-color);
+    font-weight: 1000;
+    font-size: 1.2rem; 
+}
+.announcement-content ul {
+    list-style-type: none;
+    margin: 0.8rem 0; 
+    padding-left: 1.5rem;   
+}
+</style>
+<div class="announcement-card">
+    <div class="announcement-content">
+        <p><span class="highlight">欢迎来到Xun's网络安全研习录</span>！🎉</p>
+        <p><strong>本平台专注于：</strong></p>
+        <ul>
+            <li><span class="keyword">> 网络安全技术研究</span></li>
+            <li><span class="keyword">> 渗透测试实战案例</span></li>
+            <li><span class="keyword">> CTF竞赛解析</span></li>
+            <li><span class="keyword">> 漏洞复现分析</span></li>
+        </ul>
+        <p>🌟 <strong>加入我们，一起探索网络安全奥秘，提升攻防实战能力，共同守护数字世界的安宁！</strong></p>
+    </div>
+</div>
+</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Wireshark"><span class="toc-number">1.</span> <span class="toc-text">Wireshark</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">免责声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.3.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E8%AF%AD%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">过滤语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%95%E8%8E%B7USB%E6%B5%81%E9%87%8F"><span class="toc-number">1.5.</span> <span class="toc-text">捕获USB流量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">1.6.</span> <span class="toc-text">案例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/42aa118/" title="PolarisCTF Web"><img src="/img/04.png" onerror="this.onerror=null;this.src='/img/06.jpg'" alt="PolarisCTF Web"></a><div class="content"><a class="title" href="/posts/42aa118/" title="PolarisCTF Web">PolarisCTF Web</a><time datetime="2026-04-11T06:01:29.168Z" title="Created 2026-04-11 14:01:29">2026-04-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/d2cc9b2a/" title="Wireshark"><img src="/img/04.png" onerror="this.onerror=null;this.src='/img/06.jpg'" alt="Wireshark"></a><div class="content"><a class="title" href="/posts/d2cc9b2a/" title="Wireshark">Wireshark</a><time datetime="2026-01-13T08:40:34.591Z" title="Created 2026-01-13 16:40:34">2026-01-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/6566effc/" title="Wfuzz"><img src="/img/04.png" onerror="this.onerror=null;this.src='/img/06.jpg'" alt="Wfuzz"></a><div class="content"><a class="title" href="/posts/6566effc/" title="Wfuzz">Wfuzz</a><time datetime="2026-01-13T08:40:19.789Z" title="Created 2026-01-13 16:40:19">2026-01-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-color: rgba(45, 10, 61, 0.2);"><div class="footer-other"><div class="footer-copyright"></div><div class="footer_custom_text"><style>
+  .footer {
+    text-align: center;
+    position: relative;
+  }
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .social-links i {
+    color: #8400ff;
+  }
+  .social-link {
+    color: #8a2be2;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: rgba(138, 43, 226, 0.1);
+  }
+  .social-link:hover {
+    color: #892be294;
+    background: #892be294;
+    transform: translateY(-3px) scale(1.2);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+    text-decoration: none !important; 
+  }
+  .footer p {
+    margin: 0.5rem 0;
+    line-height: 1;
+  }
+  .copyright {
+    font-size: 1.1rem; 
+    color: #c08bdf;
+    font-weight: 400;
+  }
+  .tagline {
+    font-size: 0.8rem;
+    color: #8a2be2;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .visitor-count {
+    font-size: 0.75rem;
+    color: rgba(219, 142, 255, 0.658);
+    font-weight: 300;
+  }
+  #visitorCount {
+    font-weight: bold;
+  }
+</style>
+<div class="footer">
+  <div class="social-links">
+    <a href="https://github.com/xun-ab" class="social-link" target="_blank" rel="external nofollow noopener noreferrer" aria-label="GitHub" title="GitHub">
+      <i class="fab fa-github"></i>
+    </a>
+    
+    <a href="https://b23.tv/9tNUOxw" class="social-link" target="_blank" rel="external nofollow noopener noreferrer" aria-label="bilibili" title="bilibili">
+      <i class="fab fa-bilibili"></i>
+    </a>
+  </div>
+  <p class="copyright">© 2026 Xun's blog - 所有权利保留</p>
+  <p class="tagline">> Stay curious, stay hacking, stay anime! <</p>
+  <p class="visitor-count">访问量: <span id="visitorCount">1024</span> | 你是第 <span id="dailyVisitor">1</span> 位今日访客</p>
+</div>
+<script>
+  // 确保DOM加载完成后执行
+  document.addEventListener('DOMContentLoaded', function() {
+    // 模拟访问量增长
+    function updateVisitorCount() {
+      const countElement = document.getElementById('visitorCount');
+      let count = parseInt(countElement.textContent) || 1024;
+      // 从localStorage获取或初始化计数
+      const storedCount = localStorage.getItem('totalVisitors');
+      if (storedCount) {
+        count = parseInt(storedCount);
+        countElement.textContent = count;
+      }
+      // 每日访客计数
+      const today = new Date().toDateString();
+      const dailyData = JSON.parse(localStorage.getItem('dailyVisitors') || '{"date":"", "count":0}');
+      if (dailyData.date !== today) {
+        dailyData.date = today;
+        dailyData.count = 0;
+      }
+      dailyData.count += 1;
+      document.getElementById('dailyVisitor').textContent = dailyData.count;
+      localStorage.setItem('dailyVisitors', JSON.stringify(dailyData));
+      // 每30秒随机增加访问量
+      setInterval(() => {
+        count += Math.floor(Math.random() * 3);
+        countElement.textContent = count;
+        localStorage.setItem('totalVisitors', count.toString());
+      }, 30000);
+    }
+    updateVisitorCount();
+    // 添加点击动画效果
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        this.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 300);
+      });
+    });
+  });
+</script>
+</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><script defer src="/js/cursor.js"></script><script src="/js/sakura.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="local-search-input"><input placeholder="输入关键词…" type="text"></div><hr><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = '/';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><script data-pjax>
+  function butterfly_categories_card_injector_config(){
+    // 检查容器是否存在
+    var parent_div_git = document.getElementById('recent-posts');
+    // 如果容器不存在，则动态创建
+    if (!parent_div_git) {
+      console.warn('butterfly_categories_card: 挂载容器不存在，正在动态创建...');
+      // 创建新容器（默认插入到页面主体顶部）
+      parent_div_git = document.createElement('div');
+      parent_div_git.id = 'recent-posts'; // 赋予配置的ID
+      document.querySelector('#page').prepend(parent_div_git); // 插入到 #content-inner 内
+    }
+    var item_html = '<style>li.categoryBar-list-item{width:32.3%;}.categoryBar-list{max-height: 950px;overflow:auto;}.categoryBar-list::-webkit-scrollbar{width:0!important}@media screen and (max-width: 650px){.categoryBar-list{max-height: 800px;}}</style><div class="recent-post-item" style="height:auto;width:100%;padding:0px;"><div id="categoryBar"><ul class="categoryBar-list"><li class="categoryBar-list-item" style="background:url(/img/11.png);"> <a class="categoryBar-list-link" href="/categories/工具使用合集/">工具使用合集</a><span class="categoryBar-list-count">3</span><span class="categoryBar-list-descr">1</span></li><li class="categoryBar-list-item" style="background:url(/img/12.png);"> <a class="categoryBar-list-link" href="/categories/WP/">WP</a><span class="categoryBar-list-count">2</span><span class="categoryBar-list-descr">2</span></li><li class="categoryBar-list-item" style="background:url(/img/13.png);"> <a class="categoryBar-list-link" href="/categories/WP/PolarisCTF/">PolarisCTF</a><span class="categoryBar-list-count">1</span><span class="categoryBar-list-descr">3</span></li></ul></div></div>';
+    console.log('已挂载 butterfly_categories_card');
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+  }
+  // 路径匹配逻辑（使用 startsWith）
+  if (location.pathname.startsWith('/categories/') || '/categories/' === 'all') {
+    butterfly_categories_card_injector_config();
+  }
+  </script><!-- hexo injector body_end end --></body></html>
